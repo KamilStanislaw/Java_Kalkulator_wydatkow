@@ -11,7 +11,7 @@ public class Main {
         List<Expense> expensesList = new ArrayList<>();
         List<Expense> expensesNames = new ArrayList<>();
 
-        DecimalFormat format = new DecimalFormat("#.##");
+        DecimalFormat format = new DecimalFormat("##.00");
 
         int workMonth;
         int choice;
