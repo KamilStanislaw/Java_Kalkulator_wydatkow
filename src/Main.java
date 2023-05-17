@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Comparator;
 
 
 public class Main {
@@ -12,7 +11,7 @@ public class Main {
         List<Expense> expensesList = new ArrayList<>();
         List<Expense> expensesNames = new ArrayList<>();
 
-        DecimalFormat f = new DecimalFormat("##.00");
+        DecimalFormat format = new DecimalFormat("#.##");
 
         int workMonth;
         int choice;
@@ -51,7 +50,7 @@ public class Main {
 
                         for (Expense expense : expensesList) {
                             if (expense.getMonth() == workMonth) {
-                                System.out.printf(f.format(expense));
+                                System.out.printf(format.format(expense));
                             }
                         }
                         System.out.println("\n0. Powrót");
@@ -71,7 +70,7 @@ public class Main {
                             }
                             for (Expense expenseHouse : expensesNames) {
                                 if (expenseHouse.getName().equals("dom") && expenseHouse.getMonth() == workMonth) {
-                                    System.out.printf(f.format(expenseHouse));
+                                    System.out.printf(format.format(expenseHouse));
                                 }
                             }
                             expensesNames.removeAll(expensesNames);
@@ -83,7 +82,7 @@ public class Main {
                             }
                             for (Expense expenseFood : expensesNames) {
                                 if (expenseFood.getName().equals("jedzenie") && expenseFood.getMonth() == workMonth) {
-                                    System.out.printf(f.format(expenseFood));
+                                    System.out.printf(format.format(expenseFood));
                                 }
                             }
                             expensesNames.removeAll(expensesNames);
@@ -107,7 +106,7 @@ public class Main {
                             }
                             for (Expense expenseJoy : expensesNames) {
                                 if (expenseJoy.getName().equals("rozrywka") && expenseJoy.getMonth() == workMonth) {
-                                    System.out.printf(f.format(expenseJoy));
+                                    System.out.printf(format.format(expenseJoy));
                                 }
                             }
                             expensesNames.removeAll(expensesNames);
@@ -119,7 +118,7 @@ public class Main {
                             }
                             for (Expense expenseOther : expensesNames) {
                                 if (expenseOther.getName().equals("inny") && expenseOther.getMonth() == workMonth) {
-                                    System.out.printf(f.format(expenseOther));
+                                    System.out.printf(format.format(expenseOther));
                                 }
                             }
                             expensesNames.removeAll(expensesNames);
@@ -153,16 +152,16 @@ public class Main {
                         if (choice == 0) {
                             break;
                         } else if (choice == 1) {
-                            System.out.printf("Suma wydatków w tym miesiącu[" + f.format(workMonth) + "]: ");
+                            System.out.printf("Suma wydatków w tym miesiącu[" + format.format(workMonth) + "]: ");
                             for (Expense expense : expensesList) {
                                 if (expense.getMonth() == workMonth) {
                                     totalAmount += expense.getAmount();
                                 }
                             }
-                            System.out.printf(f.format(totalAmount) + "\n");
+                            System.out.printf(format.format(totalAmount) + "\n");
                             totalAmount = 0;
 
-                            System.out.printf("Średnie wydatki w tym miesiącu[" + f.format(workMonth) + "]: ");
+                            System.out.printf("Średnie wydatki w tym miesiącu[" + format.format(workMonth) + "]: ");
                             int i = 0;
                             for (Expense expense : expensesList) {
                                 if (expense.getMonth() == workMonth) {
@@ -171,20 +170,20 @@ public class Main {
                                 }
                             }
                             averageAmount /= i;
-                            System.out.printf(f.format(averageAmount) + "\n");
+                            System.out.printf(format.format(averageAmount) + "\n");
                             averageAmount = 0;
 
                         } else if (choice == 2) {
                             System.out.println("Lista rocznych wydatków: ");
                             for (Expense expense : expensesList) {
-                                System.out.printf(f.format(expense));
+                                System.out.printf(format.format(expense));
                             }
 
                             System.out.println("Suma wydatków w roku: ");
                             for (Expense expense : expensesList) {
                                 totalAmount += expense.getAmount();
                             }
-                            System.out.printf(f.format(totalAmount  + "\n"));
+                            System.out.printf(format.format(totalAmount  + "\n"));
                             totalAmount = 0;
 
                             System.out.println("Średnie roczne wydatki: ");
@@ -193,7 +192,7 @@ public class Main {
                                 averageAmount += expense.getAmount();
                             }
                             averageAmount /= expensesList.size();
-                            System.out.printf(f.format(averageAmount)  + "\n");
+                            System.out.printf(format.format(averageAmount)  + "\n");
                             averageAmount = 0;
                         }
                     } else {
