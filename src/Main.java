@@ -1,8 +1,6 @@
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Main {
@@ -10,158 +8,98 @@ public class Main {
 
         List<Expense> expensesList = new ArrayList<>();
         List<Expense> expensesNames = new ArrayList<>();
+        List<Expense> expensesByValue = new ArrayList<>();
 
         DecimalFormat format = new DecimalFormat("##.00");
 
         int workMonth;
         int choice;
         double amount;
-        String name;
+        ExpenseType name;
         double totalAmount = 0;
         double averageAmount = 0;
         String line;
 
 
         while (true) {
-            System.out.println("wybierz miesiÄ…c [1-12]");
+            System.out.println("Wybierz miesi¹c [1-12]");
             Scanner scanner = new Scanner(System.in);
             try {
                 workMonth = scanner.nextInt();
 
                 if (workMonth > 12 || workMonth < 1) {
-                    System.out.println("NieprawidÅ‚owa wartoÅ›Ä‡. SprÃ³buj ponownie");
+                    System.out.println("Nieprawid³owa wartoœæ. Spróbuj ponownie");
                 }
 
                 while (true) {
                     System.out.println("");
-                    System.out.println("0. PowrÃ³t do wyboru miesiÄ…ca");
-                    System.out.println("1. WyÅ›wietl wszystkie wydatki");
+                    System.out.println("0. Powrót do wyboru miesi¹ca");
+                    System.out.println("1. Lista wydatków");
                     System.out.println("2. Dodaj wydatek");
-                    System.out.println("3. Statystyki");
-                    System.out.println("Wybieram opcjÄ™: ");
+                    System.out.println("3. Podsumowanie");
+                    System.out.println("Wybieram opcjê: ");
                     choice = scanner.nextInt();
 
                     if (choice == 0) {
                         break;
                     } else if (choice == 1) {
-                        
 
-                        System.out.println("Oto lista Twoich wydatkÃ³w w tym miesiÄ…cu");
+                        System.out.println("Oto lista Twoich wydatków w miesi¹cu: " + workMonth);
 
                         for (Expense expense : expensesList) {
                             if (expense.getMonth() == workMonth) {
-                                System.out.printf(format.format(expense));
+                                System.out.println(expense + format.format(expense.getAmount()));
                             }
                         }
-                        System.out.println("\n0. PowrÃ³t");
-                        System.out.println("1. Sortowanie wedÅ‚ug nazwy");
+                        System.out.println("\n0. Powrót");
+                        System.out.println("1. Sortowanie wed³ug nazwy");
 //                        System.out.println("2. Sortowanie od najmniejszej kwoty");
-//                        System.out.println("3. Sortowanie od najwiÄ™kszej kwoty");
-                        System.out.println("Wybieram opcjÄ™: ");
+//                        System.out.println("3. Sortowanie od najwiêkszej kwoty");
+                        System.out.println("Wybieram opcjê: ");
                         choice = scanner.nextInt();
 
                         if (choice == 0) {
                             break;
-                        } else if (choice == 1) {
-                            for (Expense expense1 : expensesList) {
-                                if (expense1.getName().equals("dom") && expense1.getMonth() == workMonth) {
-                                    expensesNames.add(expense1);
-                                }
-                            }
-                            for (Expense expenseHouse : expensesNames) {
-                                if (expenseHouse.getName().equals("dom") && expenseHouse.getMonth() == workMonth) {
-                                    System.out.printf(format.format(expenseHouse));
-                                }
-                            }
-                            expensesNames.removeAll(expensesNames);
-
-                            for (Expense expense2 : expensesList) {
-                                if (expense2.getName().equals("jedzenie") && expense2.getMonth() == workMonth) {
-                                    expensesNames.add(expense2);
-                                }
-                            }
-                            for (Expense expenseFood : expensesNames) {
-                                if (expenseFood.getName().equals("jedzenie") && expenseFood.getMonth() == workMonth) {
-                                    System.out.printf(format.format(expenseFood));
-                                }
-                            }
-                            expensesNames.removeAll(expensesNames);
-
-                            for (Expense expense3 : expensesList) {
-                                if (expense3.getName().equals("auto") && expense3.getMonth() == workMonth) {
-                                    expensesNames.add(expense3);
-                                }
-                            }
-                            for (Expense expenseCar : expensesNames) {
-                                if (expenseCar.getName().equals("auto") && expenseCar.getMonth() == workMonth) {
-                                    System.out.println(expenseCar);
-                                }
-                            }
-                            expensesNames.removeAll(expensesNames);
-
-                            for (Expense expense4 : expensesList) {
-                                if (expense4.getName().equals("rozrywka") && expense4.getMonth() == workMonth) {
-                                    expensesNames.add(expense4);
-                                }
-                            }
-                            for (Expense expenseJoy : expensesNames) {
-                                if (expenseJoy.getName().equals("rozrywka") && expenseJoy.getMonth() == workMonth) {
-                                    System.out.printf(format.format(expenseJoy));
-                                }
-                            }
-                            expensesNames.removeAll(expensesNames);
-
-                            for (Expense expense5 : expensesList) {
-                                if (expense5.getName().equals("inny") && expense5.getMonth() == workMonth) {
-                                    expensesNames.add(expense5);
-                                }
-                            }
-                            for (Expense expenseOther : expensesNames) {
-                                if (expenseOther.getName().equals("inny") && expenseOther.getMonth() == workMonth) {
-                                    System.out.printf(format.format(expenseOther));
-                                }
-                            }
-                            expensesNames.removeAll(expensesNames);
+                        } else if (choice == 1) { //sort by name
+                            sortByName(expensesList, workMonth, expensesNames, format);
+                        } else if (choice == 2) {
                         }
-
 
                     } else if (choice == 2) {
                         scanner.nextLine();
                         System.out.println("Podaj typ wydatku (dom, jedzenie, rozrywka, auto, inny): ");
                         line = scanner.nextLine();
-                        line = line.toLowerCase();
-                        if (line.equals("dom") || line.equals("jedzenie") || line.equals("rozrywka") || line.equals("auto") || line.equals("inny")) {
-                            name = line;
+                        line = line.toUpperCase();
+                        if (line.equals("DOM") || line.equals("JEDZENIE") || line.equals("ROZRYWKA") || line.equals("AUTO") || line.equals("INNY")) {
+                            name = ExpenseType.valueOf(line);
                         } else {
-                            System.out.println("PodaÅ‚eÅ› niewÅ‚aÅ›ciwy typ. SprÃ³buj jeszcze raz.");
+                            System.out.println("Poda³eœ niew³aœciwy typ. Spróbuj jeszcze raz.");
                             break;
                         }
 
-                        System.out.println("Podaj kwotÄ™ wydatku: ");
+                        System.out.println("Podaj kwotê wydatku: ");
                         amount = scanner.nextDouble();
 
                         Expense myExpense = new Expense(name, amount, workMonth);
                         expensesList.add(myExpense);
 
                     } else if (choice == 3) {
-                        System.out.println("0. PowrÃ³t");
-                        System.out.println("1. MiesiÄ™czne");
+                        System.out.println("0. Powrót");
+                        System.out.println("1. Miesiêczne");
                         System.out.println("2. Roczne");
                         choice = scanner.nextInt();
 
                         if (choice == 0) {
                             break;
                         } else if (choice == 1) {
-                            System.out.printf("Suma wydatkÃ³w w tym miesiÄ…cu[" + format.format(workMonth) + "]: ");
                             for (Expense expense : expensesList) {
                                 if (expense.getMonth() == workMonth) {
                                     totalAmount += expense.getAmount();
                                 }
                             }
-                            System.out.printf(format.format(totalAmount) + "\n");
+                            System.out.println("Suma wydatków w tym miesi¹cu(" + workMonth + "): " + format.format(totalAmount));
                             totalAmount = 0;
 
-                            System.out.printf("Åšrednie wydatki w tym miesiÄ…cu[" + format.format(workMonth) + "]: ");
                             int i = 0;
                             for (Expense expense : expensesList) {
                                 if (expense.getMonth() == workMonth) {
@@ -170,39 +108,49 @@ public class Main {
                                 }
                             }
                             averageAmount /= i;
-                            System.out.printf(format.format(averageAmount) + "\n");
+                            System.out.println("Œrednie wydatki w tym miesi¹cu(" + workMonth + "): " + format.format(averageAmount));
                             averageAmount = 0;
 
                         } else if (choice == 2) {
-                            System.out.println("Lista rocznych wydatkÃ³w: ");
+                            System.out.println("Lista wszytkich wydatków w tym roku: ");
                             for (Expense expense : expensesList) {
-                                System.out.printf(format.format(expense));
+                                System.out.println(expense + format.format(expense.getAmount()));
                             }
 
-                            System.out.println("Suma wydatkÃ³w w roku: ");
                             for (Expense expense : expensesList) {
                                 totalAmount += expense.getAmount();
                             }
-                            System.out.printf(format.format(totalAmount  + "\n"));
+                            System.out.println("\nSuma wydatków w tym roku: " + format.format(totalAmount));
                             totalAmount = 0;
-
-                            System.out.println("Åšrednie roczne wydatki: ");
 
                             for (Expense expense : expensesList) {
                                 averageAmount += expense.getAmount();
                             }
                             averageAmount /= expensesList.size();
-                            System.out.printf(format.format(averageAmount)  + "\n");
+                            System.out.println("Œredni jednorazowy wydatek w tym roku: " + format.format(averageAmount));
                             averageAmount = 0;
                         }
                     } else {
-                        System.out.println("WybraÅ‚eÅ› nieprawidÅ‚owÄ… opcjÄ™. SprÃ³buj ponownie.");
+                        System.out.println("Wybra³eœ nieprawid³ow¹ opcjê. Spróbuj ponownie.");
                         break;
                     }
                 }
             } catch (InputMismatchException e) {
-                System.out.println("NieprawidÅ‚owa wartoÅ›Ä‡. SprÃ³buj ponownie.");
+                System.out.println("Nieprawid³owa wartoœæ. Spróbuj ponownie.");
             }
         }
+    }
+
+    private static void sortByName(List<Expense> expensesList, int workMonth, List<Expense> expensesNames, DecimalFormat format) {
+        for (Expense expense : expensesList) {
+            if (expense.getMonth() == workMonth) {
+                expensesNames.add(expense);
+            }
+        }
+        expensesNames.sort(Expense::compareTo);
+        for (Expense expenseName : expensesNames) {
+            System.out.println(expenseName + format.format(expenseName.getAmount()));
+        }
+        expensesNames.removeAll(expensesNames);
     }
 }
