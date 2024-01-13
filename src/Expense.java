@@ -4,24 +4,30 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Expense implements Comparable<Expense> {
-    private ExpenseType name;
+    private ExpenseType type;
+    private String description;
     private double amount;
     private int month;
     private MonthName monthName;
 
-    public Expense(ExpenseType name, double amount, int month) {
-        this.name = name;
+    public Expense(ExpenseType type, String description, double amount, int month) {
+        this.type = type;
+        this.description = description;
         this.amount = amount;
         this.month = month;
         this.monthName = Arrays.stream(MonthName.values()).collect(Collectors.toCollection(LinkedList::new)).get(month - 1);
     }
 
 
-    public ExpenseType getName() {
-        return name;
+    public ExpenseType getType() {
+        return type;
     }
 
-    public double getAmount() {
+    public String getDescription() {
+        return description;
+    }
+
+    public  double getAmount() {
         return amount;
     }
 
@@ -38,20 +44,20 @@ public class Expense implements Comparable<Expense> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return Double.compare(amount, expense.amount) == 0 && month == expense.month && name == expense.name && monthName == expense.monthName;
+        return Double.compare(amount, expense.amount) == 0 && month == expense.month && type == expense.type && Objects.equals(description, expense.description) && monthName == expense.monthName;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, amount, month, monthName);
+        return Objects.hash(type, description, amount, month, monthName);
     }
 
     public String toString() {
-        return "MIESI¥C: " + monthName + ", " + name + " - ";
+        return "MIESI¥C: " + monthName + ", " + type + ": " + description + " - ";
     }
 
     @Override
     public int compareTo(Expense o) {
-        return this.getName().toString().compareTo(o.getName().toString());
+        return this.getType().toString().compareTo(o.getType().toString());
     }
 }
