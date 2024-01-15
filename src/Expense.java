@@ -4,18 +4,19 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Expense implements Comparable<Expense> {
-    private ExpenseType type;
-    private String description;
-    private double amount;
-    private int month;
-    private MonthName monthName;
+    LinkedList<MonthName> monthNamesList = Arrays.stream(MonthName.values()).collect(Collectors.toCollection(LinkedList::new));
+    private final ExpenseType type;
+    private final String description;
+    private final double amount;
+    private final int month;
+    private final MonthName monthName;
 
     public Expense(ExpenseType type, String description, double amount, int month) {
         this.type = type;
         this.description = description;
         this.amount = amount;
         this.month = month;
-        this.monthName = Arrays.stream(MonthName.values()).collect(Collectors.toCollection(LinkedList::new)).get(month - 1);
+        this.monthName = monthNamesList.get(month - 1);
     }
 
 
@@ -27,7 +28,7 @@ public class Expense implements Comparable<Expense> {
         return description;
     }
 
-    public  double getAmount() {
+    public double getAmount() {
         return amount;
     }
 
