@@ -125,7 +125,7 @@ public class ExpenseManager {
     private static void sortByAmountAscending(List<Expense> expensesList, int workMonth, DecimalFormat format) {
         expensesList.stream()
                 .filter(expense -> expense.getMonth() == workMonth)
-                .sorted(Comparator.comparingDouble(expense -> expense.getAmount()))
+                .sorted(Comparator.comparingDouble(Expense::getAmount))
                 .forEach(expense -> System.out.println(expense + format.format(expense.getAmount())));
     }
 
