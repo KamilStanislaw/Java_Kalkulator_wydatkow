@@ -1,10 +1,6 @@
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-public class Expense implements Comparable<Expense> {
-    LinkedList<MonthName> monthNamesList = Arrays.stream(MonthName.values()).collect(Collectors.toCollection(LinkedList::new));
+public class Expense implements Comparable<Expense>, MonthNumberToName {
     private final ExpenseType type;
     private final String description;
     private final double amount;
@@ -16,7 +12,7 @@ public class Expense implements Comparable<Expense> {
         this.description = description;
         this.amount = amount;
         this.month = month;
-        this.monthName = monthNamesList.get(month - 1);
+        this.monthName = MonthNumberToName.monthNumberToName(month);
     }
 
 
