@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Expense implements Comparable<Expense>, MonthNumberToName {
+public class Expense implements Comparable<Expense>, MonthNumberToName, Serializable {
     private final ExpenseType type;
     private final String description;
     private final double amount;
@@ -14,7 +15,6 @@ public class Expense implements Comparable<Expense>, MonthNumberToName {
         this.month = month;
         this.monthName = MonthNumberToName.monthNumberToName(month);
     }
-
 
     public ExpenseType getType() {
         return type;

@@ -1,10 +1,13 @@
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class ExpenseManager {
+    private static final String FILE_PATH_SER = "C:\\Users\\Kamil\\IdeaProjects\\Wydatki\\src\\main\\resources\\ListOfExpenses.ser";
     List<Expense> expensesList = new ArrayList<>();
     DecimalFormat format = new DecimalFormat("##.00");
     int choice;
@@ -13,6 +16,33 @@ public class ExpenseManager {
     double totalAmount = 0;
     double averageAmount = 0;
     String line;
+
+    public void loadListFromFile() { //wczytanie przy uzyciu wbudowanych klas i metod, do pliku .ser (serializable)
+        try {
+            ObjectInputStream loadingStream = new ObjectInputStream(
+                    new FileInputStream(FILE_PATH_SER));
+            expensesList = (List<Expense>) loadingStream.readObject();
+            loadingStream.close();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Wczytywanie pliku nie powiod³o siê.");
+            e.printStackTrace();
+        }
+    }
+
+    //zapis i odczyt do pliku .ser mo¿liwe tylko na obiektach (kolekcjach tych obiektów)
+    // na których zaimplementowano Interferjs Serializable
+
+    public void saveListToFile() { //zapis przy u¿yciu wbudowanych klas i metod do pliku .ser (serializable)
+        try {
+            ObjectOutputStream savingStream = new ObjectOutputStream(
+                    new FileOutputStream(FILE_PATH_SER));
+            savingStream.writeObject(expensesList);
+            savingStream.close();
+        } catch (IOException e) {
+            System.err.println("Nie uda³o siê zapisaæ pliku");
+            e.printStackTrace();
+        }
+    }
 
     public void listMonthExpenses(Scanner scanner, int workMonth) {
         System.out.println("Oto lista Twoich wydatków w miesi¹cu: " + workMonth);
@@ -115,23 +145,27 @@ public class ExpenseManager {
         averageAmount = 0;
     }
 
+    private static Predicate<Expense> selectByMonth(int workMonth) {
+        return expense -> expense.getMonth() == workMonth;
+    }
+
     private static void sortByAmountDescending(List<Expense> expensesList, int workMonth, DecimalFormat format) {
         expensesList.stream()
-                .filter(expense -> expense.getMonth() == workMonth)
+                .filter(selectByMonth(workMonth))
                 .sorted((o1, o2) -> Double.compare(o2.getAmount(), o1.getAmount()))
                 .forEach(expense -> System.out.println(expense + format.format(expense.getAmount())));
     }
 
     private static void sortByAmountAscending(List<Expense> expensesList, int workMonth, DecimalFormat format) {
         expensesList.stream()
-                .filter(expense -> expense.getMonth() == workMonth)
+                .filter(selectByMonth(workMonth))
                 .sorted(Comparator.comparingDouble(Expense::getAmount))
                 .forEach(expense -> System.out.println(expense + format.format(expense.getAmount())));
     }
 
     private static void sortByName(List<Expense> expensesList, int workMonth, DecimalFormat format) {
         expensesList.stream()
-                .filter(expense -> expense.getMonth() == workMonth)
+                .filter(selectByMonth(workMonth))
                 .sorted(Expense::compareTo)
                 .forEach(expense -> System.out.println(expense + format.format(expense.getAmount())));
     }

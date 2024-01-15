@@ -3,6 +3,8 @@ import java.util.*;
 public class ExpenseApp {
     ExpenseManager expenseManager = new ExpenseManager();
     public void start() {
+        expenseManager.loadListFromFile();
+
         int workMonth;
         int choice;
 
@@ -35,6 +37,7 @@ public class ExpenseApp {
                     } else if (choice == 3) {
                         expenseManager.summary(scanner, workMonth);
                     } else if (choice == 4) {
+                        expenseManager.saveListToFile();
                         System.out.println("Do zobaczenia!");
                         scanner.close();
                         System.exit(0);
