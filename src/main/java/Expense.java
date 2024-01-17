@@ -1,14 +1,15 @@
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Expense implements Comparable<Expense>, MonthNumberToName, Serializable {
     private final ExpenseType type;
     private final String description;
-    private final double amount;
+    private final BigDecimal amount;
     private final int month;
     private final MonthName monthName;
 
-    public Expense(ExpenseType type, String description, double amount, int month) {
+    public Expense(ExpenseType type, String description, BigDecimal amount, int month) {
         this.type = type;
         this.description = description;
         this.amount = amount;
@@ -24,7 +25,7 @@ public class Expense implements Comparable<Expense>, MonthNumberToName, Serializ
         return description;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -41,7 +42,7 @@ public class Expense implements Comparable<Expense>, MonthNumberToName, Serializ
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return Double.compare(amount, expense.amount) == 0 && month == expense.month && type == expense.type && Objects.equals(description, expense.description) && monthName == expense.monthName;
+        return month == expense.month && type == expense.type && Objects.equals(description, expense.description) && Objects.equals(amount, expense.amount) && monthName == expense.monthName;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class Expense implements Comparable<Expense>, MonthNumberToName, Serializ
     }
 
     public String toString() {
-        return "MIESI¥C: " + monthName + ", " + type + ": " + description + " - ";
+        return "MIESI¥C: " + monthName + ", " + type + ": " + description + " - " + amount;
     }
 
     @Override
