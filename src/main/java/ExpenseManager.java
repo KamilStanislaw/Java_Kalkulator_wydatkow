@@ -1,8 +1,6 @@
 import java.io.*;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -10,7 +8,7 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 
 public class ExpenseManager {
-    private static final String FILE_PATH_SER = "C:\\Users\\Kamil\\IdeaProjects\\Wydatki\\src\\main\\resources\\ListOfExpenses.ser";
+    private static final String FILE_PATH_SER = "src\\main\\resources\\ListOfExpenses.ser";
     List<Expense> expensesList = new ArrayList<>();
     int choice;
     String description;
@@ -19,7 +17,7 @@ public class ExpenseManager {
     BigDecimal averageAmount = new BigDecimal("0");
     String line;
 
-    public void loadListFromFile() { //wczytanie przy uzyciu wbudowanych klas i metod, do pliku .ser (serializable)
+    void loadListFromFile() { //wczytanie przy uzyciu wbudowanych klas i metod, do pliku .ser (serializable)
         try {
             ObjectInputStream loadingStream = new ObjectInputStream(
                     new FileInputStream(FILE_PATH_SER));
@@ -34,7 +32,7 @@ public class ExpenseManager {
     //zapis i odczyt do pliku .ser mo¿liwe tylko na obiektach (kolekcjach tych obiektów)
     // na których zaimplementowano Interferjs Serializable
 
-    public void saveListToFile() { //zapis przy u¿yciu wbudowanych klas i metod do pliku .ser (serializable)
+    void saveListToFile() { //zapis przy u¿yciu wbudowanych klas i metod do pliku .ser (serializable)
         try {
             ObjectOutputStream savingStream = new ObjectOutputStream(
                     new FileOutputStream(FILE_PATH_SER));
@@ -46,7 +44,7 @@ public class ExpenseManager {
         }
     }
 
-    public void listMonthExpenses(Scanner scanner, int workMonth) {
+    void listMonthExpenses(Scanner scanner, int workMonth) {
         System.out.println("Oto lista Twoich wydatków w miesi¹cu: " + workMonth);
         for (Expense expense : expensesList) {
             if (expense.getMonth() == workMonth) {
@@ -71,7 +69,7 @@ public class ExpenseManager {
         }
     }
 
-    public void addExpense(Scanner scanner, int workMonth) {
+    void addExpense(Scanner scanner, int workMonth) {
         ExpenseType name = null;
         scanner.nextLine();
         System.out.println("Podaj typ wydatku (dom, jedzenie, rozrywka, auto, inny): ");
@@ -96,7 +94,7 @@ public class ExpenseManager {
         expensesList.add(myExpense);
     }
 
-    public void summary(Scanner scanner, int workMonth) {
+    void summary(Scanner scanner, int workMonth) {
         System.out.println("0. Powrót");
         System.out.println("1. Miesiêczne");
         System.out.println("2. Roczne");
@@ -110,7 +108,7 @@ public class ExpenseManager {
         }
     }
 
-    private void monthlySummary(int workMonth) {
+    void monthlySummary(int workMonth) {
         for (Expense expense : expensesList) {
             if (expense.getMonth() == workMonth) {
                 totalAmount = totalAmount.add(expense.getAmount());
