@@ -23,8 +23,9 @@ public class ExpenseApp {
                     System.out.println("0. Powrót do wyboru miesi¹ca");
                     System.out.println("1. Lista wydatków");
                     System.out.println("2. Dodaj wydatek");
-                    System.out.println("3. Podsumowanie");
-                    System.out.println("4. Wyjœcie");
+                    System.out.println("3. Usuñ wydatek z listy");
+                    System.out.println("4. Podsumowanie");
+                    System.out.println("5. Wyjœcie");
                     System.out.println("Wybieram opcjê: ");
                     choice = scanner.nextInt();
 
@@ -35,8 +36,10 @@ public class ExpenseApp {
                     } else if (choice == 2) {
                         expenseManager.addExpense(scanner, workMonth);
                     } else if (choice == 3) {
-                        expenseManager.summary(scanner, workMonth);
+                        expenseManager.deleteExpense(workMonth);
                     } else if (choice == 4) {
+                        expenseManager.summary(scanner, workMonth);
+                    } else if (choice == 5) {
                         expenseManager.saveListToFile();
                         System.out.println("Do zobaczenia!");
                         scanner.close();

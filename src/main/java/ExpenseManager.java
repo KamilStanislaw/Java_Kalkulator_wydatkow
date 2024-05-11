@@ -94,6 +94,31 @@ public class ExpenseManager {
         expensesList.add(myExpense);
     }
 
+    public void deleteExpense(int workMonth) {
+        Scanner scanner2 = new Scanner(System.in);
+        for (Expense expense : expensesList) {
+            if (expense.getMonth() == workMonth) {
+                System.out.println(expense);
+            }
+        }
+        System.out.println("Opisz swój wydatek: ");
+        description = scanner2.nextLine();
+
+        System.out.println("Podaj kwotê wydatku (u¿yj przecinka ','): ");
+        String parseToString = String.valueOf(scanner2.nextDouble());
+        amount = new BigDecimal(parseToString);
+
+        for (Expense expense : expensesList) {
+            if ((expense.getMonth() == workMonth) && (expense.getDescription().equals(description)
+                    && (expense.getAmount().equals(amount)))) {
+                System.out.println("Usuniêto wydatek: " + expense);
+                expensesList.remove(expense);
+                break;
+            }
+        }
+
+    }
+
     void summary(Scanner scanner, int workMonth) {
         System.out.println("0. Powrót");
         System.out.println("1. Miesiêczne");
@@ -171,5 +196,6 @@ public class ExpenseManager {
                 .forEach(System.out::println);
 //                .forEach(expense -> System.out.printf("%s %.2f\n", expense, expense.getAmount())); //lub String.format()
     }
+
 
 }
