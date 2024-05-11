@@ -24,38 +24,38 @@ public class ExpenseManager {
             expensesList = (List<Expense>) loadingStream.readObject();
             loadingStream.close();
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Wczytywanie pliku nie powiod³o siê.");
+            System.err.println("Wczytywanie pliku nie powiodÅ‚o siÄ™.");
             e.printStackTrace();
         }
     }
 
-    //zapis i odczyt do pliku .ser mo¿liwe tylko na obiektach (kolekcjach tych obiektów)
-    // na których zaimplementowano Interferjs Serializable
+    //zapis i odczyt do pliku .ser moÅ¼liwe tylko na obiektach (kolekcjach tych obiektÃ³w)
+    // na ktÃ³rych zaimplementowano Interferjs Serializable
 
-    void saveListToFile() { //zapis przy u¿yciu wbudowanych klas i metod do pliku .ser (serializable)
+    void saveListToFile() { //zapis przy uÅ¼yciu wbudowanych klas i metod do pliku .ser (serializable)
         try {
             ObjectOutputStream savingStream = new ObjectOutputStream(
                     new FileOutputStream(FILE_PATH_SER));
             savingStream.writeObject(expensesList);
             savingStream.close();
         } catch (IOException e) {
-            System.err.println("Nie uda³o siê zapisaæ pliku");
+            System.err.println("Nie udaÅ‚o siÄ™ zapisaÄ‡ pliku");
             e.printStackTrace();
         }
     }
 
     void listMonthExpenses(Scanner scanner, int workMonth) {
-        System.out.println("Oto lista Twoich wydatków w miesi¹cu: " + workMonth);
+        System.out.println("Oto lista Twoich wydatkÃ³w w miesiÄ…cu: " + workMonth);
         for (Expense expense : expensesList) {
             if (expense.getMonth() == workMonth) {
                 System.out.println(expense);
             }
         }
-        System.out.println("\n0. Powrót");
-        System.out.println("1. Sortowanie wed³ug nazwy");
+        System.out.println("\n0. PowrÃ³t");
+        System.out.println("1. Sortowanie wedÅ‚ug nazwy");
         System.out.println("2. Sortowanie od najmniejszej kwoty");
-        System.out.println("3. Sortowanie od najwiêkszej kwoty");
-        System.out.println("Wybieram opcjê: ");
+        System.out.println("3. Sortowanie od najwiÄ™kszej kwoty");
+        System.out.println("Wybieram opcjÄ™: ");
         choice = scanner.nextInt();
 
         if (choice == 0) {
@@ -80,13 +80,13 @@ public class ExpenseManager {
                 name = ExpenseType.valueOf(line);
                 break;
             } else {
-                System.out.println("Poda³eœ niew³aœciwy typ. Spróbuj jeszcze raz.");
+                System.out.println("PodaÅ‚eÅ› niewÅ‚aÅ›ciwy typ. SprÃ³buj jeszcze raz.");
             }
         }
-        System.out.println("Opisz swój wydatek: ");
+        System.out.println("Opisz swÃ³j wydatek: ");
         description = scanner.nextLine();
 
-        System.out.println("Podaj kwotê wydatku (u¿yj przecinka ','): ");
+        System.out.println("Podaj kwotÄ™ wydatku (uÅ¼yj przecinka ','): ");
         String parseToString = String.valueOf(scanner.nextDouble());
         amount = new BigDecimal(parseToString);
 
@@ -101,17 +101,17 @@ public class ExpenseManager {
                 System.out.println(expense);
             }
         }
-        System.out.println("Opisz swój wydatek: ");
+        System.out.println("Opisz swÃ³j wydatek: ");
         description = scanner2.nextLine();
 
-        System.out.println("Podaj kwotê wydatku (u¿yj przecinka ','): ");
+        System.out.println("Podaj kwotÄ™ wydatku (uÅ¼yj przecinka ','): ");
         String parseToString = String.valueOf(scanner2.nextDouble());
         amount = new BigDecimal(parseToString);
 
         for (Expense expense : expensesList) {
             if ((expense.getMonth() == workMonth) && (expense.getDescription().equals(description)
                     && (expense.getAmount().equals(amount)))) {
-                System.out.println("Usuniêto wydatek: " + expense);
+                System.out.println("UsuniÄ™to wydatek: " + expense);
                 expensesList.remove(expense);
                 break;
             }
@@ -120,8 +120,8 @@ public class ExpenseManager {
     }
 
     void summary(Scanner scanner, int workMonth) {
-        System.out.println("0. Powrót");
-        System.out.println("1. Miesiêczne");
+        System.out.println("0. PowrÃ³t");
+        System.out.println("1. MiesiÄ™czne");
         System.out.println("2. Roczne");
         choice = scanner.nextInt();
 
@@ -139,7 +139,7 @@ public class ExpenseManager {
                 totalAmount = totalAmount.add(expense.getAmount());
             }
         }
-        System.out.println("Suma wydatków w tym miesi¹cu(" + workMonth + "): " + totalAmount);
+        System.out.println("Suma wydatkÃ³w w tym miesiÄ…cu(" + workMonth + "): " + totalAmount);
         totalAmount = new BigDecimal("0");
         int i = 0;
         for (Expense expense : expensesList) {
@@ -149,25 +149,25 @@ public class ExpenseManager {
             }
         }
         averageAmount = averageAmount.divide(new BigDecimal(String.valueOf(i)), 2, RoundingMode.HALF_UP);
-        System.out.println("Œrednie wydatki w tym miesi¹cu(" + workMonth + "): " + averageAmount);
+        System.out.println("Åšrednie wydatki w tym miesiÄ…cu(" + workMonth + "): " + averageAmount);
         averageAmount = new BigDecimal("0");
     }
 
     private void annualSummary() {
-        System.out.println("Lista wszytkich wydatków w tym roku: ");
+        System.out.println("Lista wszytkich wydatkÃ³w w tym roku: ");
         for (Expense expense : expensesList) {
             System.out.println(expense);
         }
         for (Expense expense : expensesList) {
             totalAmount = totalAmount.add(expense.getAmount()) ;
         }
-        System.out.println("\nSuma wydatków w tym roku: " + totalAmount);
+        System.out.println("\nSuma wydatkÃ³w w tym roku: " + totalAmount);
         totalAmount = new BigDecimal("0");
         for (Expense expense : expensesList) {
             averageAmount = averageAmount.add(expense.getAmount());
         }
         averageAmount = averageAmount.divide(new BigDecimal(expensesList.size()), 2, RoundingMode.HALF_UP);
-        System.out.println("Œredni jednorazowy wydatek w tym roku: " + averageAmount);
+        System.out.println("Åšredni jednorazowy wydatek w tym roku: " + averageAmount);
         averageAmount = new BigDecimal("0");
     }
 

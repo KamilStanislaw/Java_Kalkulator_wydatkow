@@ -1,15 +1,15 @@
 public enum MonthName {
-    STYCZE—,
+    STYCZE≈É,
     LUTY,
     MARZEC,
-    KWIECIE—,
+    KWIECIE≈É,
     MAJ,
     CZERWIEC,
     LIPIEC,
-    SIERPIE—,
-    WRZESIE—,
-    PAèDZIERNIK,
+    SIERPIE≈É,
+    WRZESIE≈É,
+    PA≈πDZIERNIK,
     LISTOPAD,
-    GRUDZIE—;
+    GRUDZIE≈É;
 
 }

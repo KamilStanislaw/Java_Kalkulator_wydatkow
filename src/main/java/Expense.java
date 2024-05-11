@@ -51,7 +51,7 @@ public class Expense implements Comparable<Expense>, MonthNumberToName, Serializ
     }
 
     public String toString() {
-        return "MIESI¥C: " + monthName + ", " + type + ": " + description + " - " + amount;
+        return "MIESIÄ„C: " + monthName + ", " + type + ": " + description + " - " + amount;
     }
 
     @Override

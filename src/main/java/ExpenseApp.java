@@ -8,25 +8,25 @@ public class ExpenseApp {
         int workMonth;
         int choice;
 
-        System.out.println("Witaj w aplikacji do zarz¹dzania wydatkami.");
+        System.out.println("Witaj w aplikacji do zarzÄ…dzania wydatkami.");
 
         while (true) {
-            System.out.println("Wybierz miesi¹c [1-12]");
+            System.out.println("Wybierz miesiÄ…c [1-12]");
             Scanner scanner = new Scanner(System.in);
             try {
                 workMonth = scanner.nextInt();
                 if (workMonth > 12 || workMonth < 1) {
-                    System.out.println("Nieprawid³owa wartoœæ. Spróbuj ponownie");
+                    System.out.println("NieprawidÅ‚owa wartoÅ›Ä‡. SprÃ³buj ponownie");
                 }
                 while (true) {
                     System.out.println("");
-                    System.out.println("0. Powrót do wyboru miesi¹ca");
-                    System.out.println("1. Lista wydatków");
+                    System.out.println("0. PowrÃ³t do wyboru miesiÄ…ca");
+                    System.out.println("1. Lista wydatkÃ³w");
                     System.out.println("2. Dodaj wydatek");
-                    System.out.println("3. Usuñ wydatek z listy");
+                    System.out.println("3. UsuÅ„ wydatek z listy");
                     System.out.println("4. Podsumowanie");
-                    System.out.println("5. Wyjœcie");
-                    System.out.println("Wybieram opcjê: ");
+                    System.out.println("5. WyjÅ›cie");
+                    System.out.println("Wybieram opcjÄ™: ");
                     choice = scanner.nextInt();
 
                     if (choice == 0) {
@@ -45,11 +45,11 @@ public class ExpenseApp {
                         scanner.close();
                         System.exit(0);
                     } else {
-                        System.out.println("Wybra³eœ nieprawid³ow¹ opcjê. Spróbuj ponownie.");
+                        System.out.println("WybraÅ‚eÅ› nieprawidÅ‚owÄ… opcjÄ™. SprÃ³buj ponownie.");
                     }
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Nieprawid³owa wartoœæ. Spróbuj ponownie.");
+                System.out.println("NieprawidÅ‚owa wartoÅ›Ä‡. SprÃ³buj ponownie.");
             }
         }
     }
