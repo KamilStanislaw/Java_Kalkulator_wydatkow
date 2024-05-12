@@ -1,15 +1,13 @@
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class ExpenseManager {
     private static final String FILE_PATH_SER = "src\\main\\resources\\ListOfExpenses.ser";
     List<Expense> expensesList = new ArrayList<>();
+    List<Expense> tempExpensesList = new LinkedList<>();
     int choice;
     String description;
     BigDecimal amount;
@@ -19,13 +17,20 @@ public class ExpenseManager {
 
     void loadListFromFile() { //wczytanie przy uzyciu wbudowanych klas i metod, do pliku .ser (serializable)
         try {
+            System.out.println();
+            System.out.println("Witaj w aplikacji do zarządzania wydatkami!");
+            System.out.println("-------------------------------------------");
+            System.out.println("Wczytuję listę Twoich wydatków...");
+            System.out.println("-------------------------------------------");
             ObjectInputStream loadingStream = new ObjectInputStream(
                     new FileInputStream(FILE_PATH_SER));
             expensesList = (List<Expense>) loadingStream.readObject();
             loadingStream.close();
+            System.out.println("Sukces! Zaczynajmy!");
+            System.out.println("-------------------------------------------");
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Wczytywanie pliku nie powiodło się.");
-            e.printStackTrace();
+            System.err.println("Najwidoczniej nie masz jeszcze zapisanych wydatków, lub plik jest uszkodzony.");
         }
     }
 
@@ -44,10 +49,10 @@ public class ExpenseManager {
         }
     }
 
-    void listMonthExpenses(Scanner scanner, int workMonth) {
+    void listMonthExpenses(Scanner scanner, int workMonth, int year) {
         System.out.println("Oto lista Twoich wydatków w miesiącu: " + workMonth);
         for (Expense expense : expensesList) {
-            if (expense.getMonth() == workMonth) {
+            if ((expense.getMonth() == workMonth) && (expense.getYear() == year)) {
                 System.out.println(expense);
             }
         }
@@ -61,22 +66,22 @@ public class ExpenseManager {
         if (choice == 0) {
 
         } else if (choice == 1) { //sort by name
-            sortByName(expensesList, workMonth);
+            sortByName(expensesList, workMonth, year);
         } else if (choice == 2) {
-            sortByAmountAscending(expensesList, workMonth);
+            sortByAmountAscending(expensesList, workMonth, year);
         } else if (choice == 3) {
-            sortByAmountDescending(expensesList, workMonth);
+            sortByAmountDescending(expensesList, workMonth, year);
         }
     }
 
-    void addExpense(Scanner scanner, int workMonth) {
+    void addExpense(Scanner scanner, int workMonth, int year) {
         ExpenseType name = null;
         scanner.nextLine();
-        System.out.println("Podaj typ wydatku (dom, jedzenie, rozrywka, auto, inny): ");
+        System.out.println("Podaj typ wydatku (dom, jedzenie, rozrywka, edukacja, auto, inny): ");
         while (true) {
             line = scanner.nextLine();
             line = line.toUpperCase();
-            if ("DOM".equals(line) || "JEDZENIE".equals(line) || "ROZRYWKA".equals(line) || "AUTO".equals(line) || "INNY".equals(line)) {
+            if ("DOM".equals(line) || "JEDZENIE".equals(line) || "ROZRYWKA".equals(line) || "EDUKACJA".equals(line) || "AUTO".equals(line) || "INNY".equals(line)) {
                 name = ExpenseType.valueOf(line);
                 break;
             } else {
@@ -90,18 +95,18 @@ public class ExpenseManager {
         String parseToString = String.valueOf(scanner.nextDouble());
         amount = new BigDecimal(parseToString);
 
-        Expense myExpense = new Expense(name, description, amount, workMonth);
+        Expense myExpense = new Expense(name, description, amount, workMonth, year);
         expensesList.add(myExpense);
     }
 
-    public void deleteExpense(int workMonth) {
+    public void deleteExpense(int workMonth, int year) {
         Scanner scanner2 = new Scanner(System.in);
         for (Expense expense : expensesList) {
-            if (expense.getMonth() == workMonth) {
+            if ((expense.getMonth() == workMonth) && (expense.getYear() == year)) {
                 System.out.println(expense);
             }
         }
-        System.out.println("Opisz swój wydatek: ");
+        System.out.println("Opis wydatku do usunięcia: ");
         description = scanner2.nextLine();
 
         System.out.println("Podaj kwotę wydatku (użyj przecinka ','): ");
@@ -109,8 +114,8 @@ public class ExpenseManager {
         amount = new BigDecimal(parseToString);
 
         for (Expense expense : expensesList) {
-            if ((expense.getMonth() == workMonth) && (expense.getDescription().equals(description)
-                    && (expense.getAmount().equals(amount)))) {
+            if ((expense.getMonth() == workMonth) && (expense.getDescription().equals(description))
+                    && (expense.getAmount().equals(amount)) && (expense.getYear() == year)) {
                 System.out.println("Usunięto wydatek: " + expense);
                 expensesList.remove(expense);
                 break;
@@ -119,7 +124,7 @@ public class ExpenseManager {
 
     }
 
-    void summary(Scanner scanner, int workMonth) {
+    void summary(Scanner scanner, int workMonth, int year) {
         System.out.println("0. Powrót");
         System.out.println("1. Miesięczne");
         System.out.println("2. Roczne");
@@ -127,75 +132,86 @@ public class ExpenseManager {
 
         if (choice == 0) {
         } else if (choice == 1) {
-            monthlySummary(workMonth);
+            monthlySummary(workMonth, year);
         } else if (choice == 2) {
-            annualSummary();
+            annualSummary(year);
         }
     }
 
-    void monthlySummary(int workMonth) {
+    void monthlySummary(int workMonth, int year) {
         for (Expense expense : expensesList) {
-            if (expense.getMonth() == workMonth) {
+            if ((expense.getMonth() == workMonth) && (expense.getYear() == year)) {
                 totalAmount = totalAmount.add(expense.getAmount());
+                tempExpensesList.add(expense);
             }
         }
         System.out.println("Suma wydatków w tym miesiącu(" + workMonth + "): " + totalAmount);
         totalAmount = new BigDecimal("0");
-        int i = 0;
-        for (Expense expense : expensesList) {
-            if (expense.getMonth() == workMonth) {
-                averageAmount = averageAmount.add(expense.getAmount());
-                i++;
-            }
+
+        for (Expense expense : tempExpensesList) {
+            averageAmount = averageAmount.add(expense.getAmount());
         }
-        averageAmount = averageAmount.divide(new BigDecimal(String.valueOf(i)), 2, RoundingMode.HALF_UP);
-        System.out.println("Średnie wydatki w tym miesiącu(" + workMonth + "): " + averageAmount);
-        averageAmount = new BigDecimal("0");
+
+        if (!tempExpensesList.isEmpty()) {
+            averageAmount = averageAmount.divide(new BigDecimal(tempExpensesList.size()), 2, RoundingMode.HALF_UP);
+            System.out.println("Średnie wydatki w tym miesiącu(" + workMonth + "): " + averageAmount);
+            averageAmount = new BigDecimal("0");
+        }
+        tempExpensesList.clear();
     }
 
-    private void annualSummary() {
+    private void annualSummary(int year) {
         System.out.println("Lista wszytkich wydatków w tym roku: ");
         for (Expense expense : expensesList) {
-            System.out.println(expense);
+            if (expense.getYear() == year) {
+                tempExpensesList.add(expense);
+                System.out.println(expense);
+            }
         }
-        for (Expense expense : expensesList) {
+        for (Expense expense : tempExpensesList) {
             totalAmount = totalAmount.add(expense.getAmount()) ;
         }
         System.out.println("\nSuma wydatków w tym roku: " + totalAmount);
         totalAmount = new BigDecimal("0");
-        for (Expense expense : expensesList) {
-            averageAmount = averageAmount.add(expense.getAmount());
+        for (Expense expense : tempExpensesList) {
+                averageAmount = averageAmount.add(expense.getAmount());
         }
-        averageAmount = averageAmount.divide(new BigDecimal(expensesList.size()), 2, RoundingMode.HALF_UP);
-        System.out.println("Średni jednorazowy wydatek w tym roku: " + averageAmount);
-        averageAmount = new BigDecimal("0");
+
+        if (!tempExpensesList.isEmpty()) {
+            averageAmount = averageAmount.divide(new BigDecimal(tempExpensesList.size()), 2, RoundingMode.HALF_UP);
+            System.out.println("Średni jednorazowy wydatek w tym roku: " + averageAmount);
+            averageAmount = new BigDecimal("0");
+        }
+        tempExpensesList.clear();
     }
 
     private static Predicate<Expense> selectByMonth(int workMonth) {
         return expense -> expense.getMonth() == workMonth;
     }
 
-    private static void sortByAmountDescending(List<Expense> expensesList, int workMonth) {
+    private static void sortByAmountDescending(List<Expense> expensesList, int workMonth, int year) {
         expensesList.stream()
                 .filter(selectByMonth(workMonth))
+                .filter(expense -> expense.getYear() == year)
                 .sorted((o1, o2) -> o2.getAmount().compareTo(o1.getAmount()))
                 .forEach(System.out::println);
     }
 
-    private static void sortByAmountAscending(List<Expense> expensesList, int workMonth) {
+    private static void sortByAmountAscending(List<Expense> expensesList, int workMonth, int year) {
         expensesList.stream()
                 .filter(selectByMonth(workMonth))
+                .filter(expense -> expense.getYear() == year)
                 .sorted((Comparator.comparing(Expense::getAmount)))
                 .forEach(System.out::println);
     }
 
-    private static void sortByName(List<Expense> expensesList, int workMonth) {
+    private static void sortByName(List<Expense> expensesList, int workMonth, int year) {
         expensesList.stream()
                 .filter(selectByMonth(workMonth))
+                .filter(expense -> expense.getYear() == year)
                 .sorted(Expense::compareTo)
                 .forEach(System.out::println);
 //                .forEach(expense -> System.out.printf("%s %.2f\n", expense, expense.getAmount())); //lub String.format()
     }
-
 
 }
