@@ -5,8 +5,8 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class ExpenseManager {
-//    private static final String FILE_PATH_SER = "src\\main\\resources\\ListOfExpenses.ser";
-    private static final String FILE_PATH_SER = "~\\ListOfExpenses.ser".replace("~", System.getProperty("user.home"));
+    private static final String FILE_PATH_SER = "src\\main\\resources\\ListOfExpenses.ser";
+//    private static final String FILE_PATH_SER = "~\\ListOfExpenses.ser".replace("~", System.getProperty("user.home"));
     List<Expense> expensesList = new ArrayList<>();
     List<Expense> tempExpensesList = new LinkedList<>();
     int choice;
